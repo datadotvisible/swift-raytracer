@@ -9,36 +9,21 @@
 import Foundation
 
 struct RenderOutput {
-    static func write(filename: String) -> Bool {
+    var width: Int
+    var height: Int
+    var fileName: String
+    
+    func write() -> Bool {
+        let contents = "Here are my file's contents"
         do {
-            // get the documents folder url
-            let documentDirectoryURL = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            // create the destination url for the text file to be saved
-            let fileDestinationUrl = documentDirectoryURL.appendingPathComponent(filename)
-            
-            let text = "some text"
-            do {
-                // writing to disk
-                try text.write(to: fileDestinationUrl, atomically: false, encoding: .utf8)
-                
-                // saving was successful. any code posterior code goes here
-                // reading from disk
-                do {
-                    let mytext = try String(contentsOf: fileDestinationUrl)
-                    print(mytext)   // "some text\n"
-                } catch let error as NSError {
-                    print("error loading contentsOf url \(fileDestinationUrl)")
-                    print(error.localizedDescription)
-                } 
-            } catch let error as NSError {
-                print("error writing to url \(fileDestinationUrl)")
-                print(error.localizedDescription)
-            }
-        } catch let error as NSError {
-            print("error getting documentDirectoryURL")
-            print(error.localizedDescription)
+            // Write contents to file
+            try contents.write(toFile: self.fileName, atomically: false, encoding: String.Encoding.utf8)
+            return true
         }
-        return true
+        catch let error as NSError {
+            print("Ooops! Something went wrong: \(error)")
+            return false
+        }
     }
     
     static func read(filename: String) {

@@ -17,3 +17,9 @@ print(B.cross(A))
 let ray: Ray = Ray(A: A, B: B)
  */
 
+let image = RenderOutput(width: 1024, height: 788, fileName: "/Users/adavid/output.txt")
+
+
+if image.write() {
+    print ("success")
+}
