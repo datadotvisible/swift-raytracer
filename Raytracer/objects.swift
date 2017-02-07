@@ -9,7 +9,7 @@
 import Foundation
 
 struct Sphere {
-    let center: Vector3D
+    let origin: Vector3D
     let radius: Float64
 }
 

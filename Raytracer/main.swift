@@ -38,9 +38,8 @@ for j in stride(from: height - 1, through: 0, by: -1) {
     for i in stride(from: 0, to: width, by: 1) {
         let u = Float64(i) / Float64(width)
         let v = Float64(j) / Float64(height)
-        print("\(camera.lowerLeftCorner + u * camera.horizontal + v * camera.vertical)")
         let ray = Ray(A: camera.origin, B: camera.lowerLeftCorner + u * camera.horizontal + v * camera.vertical)
-        let pixel = color(ray: ray)
+        let pixel = ray.color(ray: ray)
         imageData += "\(255.99 * pixel.x) \(255.9 * pixel.y) \(255.9 * pixel.z) "
     }
     do {
