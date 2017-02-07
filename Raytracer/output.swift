@@ -8,6 +8,11 @@
 
 import Foundation
 
+enum FileOutputError: Error {
+    case cannotWriteFile
+    case generalError
+}
+
 struct PpmFile {
     let type: String
     let x: Int
@@ -23,36 +28,35 @@ struct RenderOutput {
     var height: Int
     var fileName: String
     
-    func write() -> Bool {
+    func write_header() throws {
         let contents = PpmFile.header(width: width, height: height)
         
         do {
             // Write contents to file
             try contents.write(toFile: self.fileName, atomically: false, encoding: String.Encoding.utf8)
-            return true
         }
         catch let error as NSError {
             print("Ooops! Something went wrong: \(error)")
-            return false
+            throw FileOutputError.generalError
         }
     }
     
-    func write(imageData: String) -> Bool {
-        let contents = PpmFile.header(width: width, height: height)
+    func write_data(imageData: String) throws {
+        let handle = FileHandle.init(forUpdatingAtPath: self.fileName)
+        handle?.readDataToEndOfFile()
         
         do {
             // Write contents to file
-            try contents.write(toFile: self.fileName, atomically: false, encoding: String.Encoding.utf8)
-            return true
+            guard let data = imageData.data(using: .utf8) else { throw FileOutputError.generalError }
+            handle?.write(data)
         }
         catch let error as NSError {
             print("Ooops! Something went wrong: \(error)")
-            return false
+            throw FileOutputError.generalError
         }
     }
     
     static func read(filename: String) {
-        //let s = try String(contentsOfFile: Bundle.mainBundle.pathForResource(filename))
-        //print(s)
+
     }
 }

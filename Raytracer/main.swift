@@ -17,22 +17,31 @@ print(B.cross(A))
 let ray: Ray = Ray(A: A, B: B)
  */
 
-//let image = RenderOutput(width: 1024, height: 788, fileName: "/Users/adavid/output.txt")
 
 let width = 200
 let height = 100
 
 let image = RenderOutput(width: width, height: height, fileName: "/Users/adavid/output.txt")
-var imageData: String = ""
 
-//image.write()
+do {
+    try image.write_header()
+}
+catch let error as NSError {
+    print("Ooops! Something went wrong: \(error)")
+}
+
 
 for j in stride(from: height - 1, through: 0, by: -1) {
+    var imageData: String = ""
     for i in stride(from: 0, to: width, by: 1) {
         
         let pixel = Vector3D(x: Float64(i) / width, y: Float64(j) / height, z: 0.2)
-        imageData += "\(255.99 * pixel.x) \(255.9 * pixel.y) \(255.9 * pixel.z)"
+        imageData += "\(255.99 * pixel.x) \(255.9 * pixel.y) \(255.9 * pixel.z) "
+    }
+    do {
+        try image.write_data(imageData: imageData)
+    }
+    catch let error as NSError {
+        print("Ooops! Something went wrong: \(error)")
     }
 }
-
-print(imageData)
